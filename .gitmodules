@@ -1,0 +1,3 @@
+[submodule "nnn"]
+	path = nnn
+	url = https://github.com/ymarco/nnn
