@@ -11,6 +11,7 @@ void bind_function(emacs_env *env, const char *name, emacs_value Sfun);
 void provide(emacs_env *env, const char *feature);
 
 emacs_value Qnil;
+emacs_value Qargs_out_of_range;
 emacs_value Qfset;
 emacs_value Qprovide;
 
