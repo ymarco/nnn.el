@@ -15,8 +15,8 @@ void provide(emacs_env *env, const char *feature) {
   env->funcall(env, Qprovide, 1, (emacs_value[]){Qfeat});
 }
 
-emacs_value Fnnn_make_context(emacs_env *env, ptrdiff_t nargs,
-                              emacs_value args[], void *data) {
+emacs_value Fnnn_make_context(emacs_env *env, ptrdiff_t nargs __attribute__((unused)),
+                              emacs_value args[], void *data __attribute__((unused))) {
 
   context *pctx = malloc(sizeof(context));
   if (!pctx) return Qnil;
@@ -30,7 +30,7 @@ emacs_value Fnnn_make_context(emacs_env *env, ptrdiff_t nargs,
 }
 
 emacs_value Fnnn_set_context_sort_flags(emacs_env *env, ptrdiff_t nargs,
-                                        emacs_value args[], void *data) {
+                                        emacs_value args[], void *data __attribute__((unused))) {
   context* pctx = env->get_user_ptr(env, args[0]);
   for (int i = 1; i < nargs; i++) {
       int flag = env->extract_integer(env, args[i]);
@@ -38,15 +38,16 @@ emacs_value Fnnn_set_context_sort_flags(emacs_env *env, ptrdiff_t nargs,
   }
   return Qnil;
 }
-emacs_value Fnnn_populate_context(emacs_env *env, ptrdiff_t nargs,
-                                  emacs_value args[], void *data) {
+
+emacs_value Fnnn_populate_context(emacs_env *env, ptrdiff_t nargs __attribute__((unused)),
+                                  emacs_value args[], void *data __attribute__((unused))) {
   context* pctx = env->get_user_ptr(env, args[0]);
   populate(pctx);
   return Qnil;
 }
 
-emacs_value Fnnn_ls(emacs_env *env, ptrdiff_t nargs,
-                    emacs_value args[], void *data) {
+emacs_value Fnnn_ls(emacs_env *env, ptrdiff_t nargs __attribute__((unused)),
+                    emacs_value args[], void *data __attribute__((unused))) {
 
   context* pctx = env->get_user_ptr(env, args[0]);
   size_t nameslen = 0;
