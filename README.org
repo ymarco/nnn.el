@@ -1,0 +1,9 @@
+#+TITLE:   nnn.el
+
+A dired competitor, using a modified version of [[https://github.com/jarun/nnn][nnn]] as a [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Dynamic-Modules.html][dynamic module]].
+
+The goal is to make a /fast/ but still feature-rich file manager.
+
+* Current State
+The dynamic module works (tested only on Linux), but I'm stuggling with the
+elisp a little...
