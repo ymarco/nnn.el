@@ -32,7 +32,7 @@ static emacs_value Fnnn_make_context(emacs_env *env, ptrdiff_t nargs __attribute
                               emacs_value args[], void *data __attribute__((unused))) {
   context *pctx = malloc(sizeof(context));
   if (!pctx) return Qnil;
-  pctx = make_context(pctx, "/home/ym/.config/doom/packages/nnn/nnn", default_cfg);
+  pctx = make_context(pctx, " ", default_cfg);
   if (!pctx) return Qnil;
   ptrdiff_t pathlen = sizeof(pctx->c_path);
   env->copy_string_contents(env, args[0], pctx->c_path, &pathlen);
