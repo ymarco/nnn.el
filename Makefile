@@ -105,6 +105,7 @@ endif
 CFLAGS += -std=c11 -Wall -Wextra -Wshadow -fPIC
 #CFLAGS += $(CFLAGS_OPTIMIZATION)
 CFLAGS += $(CFLAGS_CURSES)
+CFLAGS += $(CPPFLAGS)
 
 LDLIBS += $(LDLIBS_CURSES)
 
@@ -117,7 +118,7 @@ endif
 .PHONY: clean
 
 nnn-module.so: nnn-module.o nnn/src/nnn.o
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared -o $@ $^ # $(LDLIBS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $^ # $(LDLIBS)
 nnn-module.o: nnn-module.c nnn-module.h nnn/src/nnn.h
 nnn/src/nnn.o: nnn/src/nnn.c nnn/src/nnn.h nnn/src/qsort.h
 
