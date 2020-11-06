@@ -16,6 +16,16 @@ static void provide(emacs_env *env, const char *feature) {
   env->funcall(env, Qprovide, 1, (emacs_value[]){Qfeat});
 }
 
+int check_range(emacs_env *env, int i, int min_, int max_) {
+  if (!(i >= min_ && i < max_)) {
+    char range[NAME_MAX];
+    int n = sprintf(range, "%d-%d, %d", min_, max_, i);
+    emacs_value err_data = env->make_string(env, range, n-1); // not including null byte
+    env->non_local_exit_signal(env, Qargs_out_of_range, err_data);
+    return 0;
+  }
+  return 1;
+}
 
 static emacs_value Fnnn_make_context(emacs_env *env, ptrdiff_t nargs __attribute__((unused)),
                               emacs_value args[], void *data __attribute__((unused))) {
@@ -71,13 +81,7 @@ static emacs_value Fnnn_get_file_at_index(emacs_env *env, ptrdiff_t nargs __attr
                                    emacs_value args[], void *data __attribute__((unused))) {
   context* pctx = env->get_user_ptr(env, args[0]);
   int i = env->extract_integer(env, args[1]);
-  if (!(i >= 0 && i < pctx->ndents)) {
-    char range[NAME_MAX];
-    int n = sprintf(range, "0-%d, %d", pctx->ndents, i);
-    emacs_value err_data = env->make_string(env, range, n-1); // not including null byte
-    env->non_local_exit_signal(env, Qargs_out_of_range, err_data);
-    return Qnil;
-  }
+  check_range(env, i, 0, pctx->ndents);
   return env->make_string(env, pctx->pdents[i].name,
                           pctx->pdents[i].nlen - 1); // not including null byte
 }
