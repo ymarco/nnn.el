@@ -5,20 +5,20 @@
 #include "nnn-module.h"
 
 
-void bind_function(emacs_env *env, const char *name, emacs_value Sfun) {
+static void bind_function(emacs_env *env, const char *name, emacs_value Sfun) {
   emacs_value Qsym = env->intern(env, name);
   env->funcall(env, Qfset, 2, (emacs_value[]){Qsym, Sfun});
 }
 
 
-void provide(emacs_env *env, const char *feature) {
+static void provide(emacs_env *env, const char *feature) {
   emacs_value Qfeat = env->intern(env, feature);
   env->funcall(env, Qprovide, 1, (emacs_value[]){Qfeat});
 }
 
-emacs_value Fnnn_make_context(emacs_env *env, ptrdiff_t nargs __attribute__((unused)),
-                              emacs_value args[], void *data __attribute__((unused))) {
 
+static emacs_value Fnnn_make_context(emacs_env *env, ptrdiff_t nargs __attribute__((unused)),
+                              emacs_value args[], void *data __attribute__((unused))) {
   context *pctx = malloc(sizeof(context));
   if (!pctx) return Qnil;
   pctx = make_context(pctx, "/home/ym/.config/doom/packages/nnn/nnn", default_cfg);
@@ -30,7 +30,7 @@ emacs_value Fnnn_make_context(emacs_env *env, ptrdiff_t nargs __attribute__((unu
   return env->make_user_ptr(env, clean_context, pctx);
 }
 
-emacs_value Fnnn_set_context_sort_flags(emacs_env *env, ptrdiff_t nargs,
+static emacs_value Fnnn_set_context_sort_flags(emacs_env *env, ptrdiff_t nargs,
                                         emacs_value args[], void *data __attribute__((unused))) {
   context* pctx = env->get_user_ptr(env, args[0]);
   for (int i = 1; i < nargs; i++) {
@@ -40,14 +40,14 @@ emacs_value Fnnn_set_context_sort_flags(emacs_env *env, ptrdiff_t nargs,
   return Qnil;
 }
 
-emacs_value Fnnn_populate_context(emacs_env *env, ptrdiff_t nargs __attribute__((unused)),
+static emacs_value Fnnn_populate_context(emacs_env *env, ptrdiff_t nargs __attribute__((unused)),
                                   emacs_value args[], void *data __attribute__((unused))) {
   context* pctx = env->get_user_ptr(env, args[0]);
   populate(pctx);
   return Qnil;
 }
 
-emacs_value Fnnn_ls(emacs_env *env, ptrdiff_t nargs __attribute__((unused)),
+static emacs_value Fnnn_ls(emacs_env *env, ptrdiff_t nargs __attribute__((unused)),
                     emacs_value args[], void *data __attribute__((unused))) {
 
   context* pctx = env->get_user_ptr(env, args[0]);
@@ -67,7 +67,7 @@ emacs_value Fnnn_ls(emacs_env *env, ptrdiff_t nargs __attribute__((unused)),
   return env->make_string(env, pconcatbuf, cursor - pconcatbuf);
 }
 
-emacs_value Fnnn_get_file_at_index(emacs_env *env, ptrdiff_t nargs __attribute__((unused)),
+static emacs_value Fnnn_get_file_at_index(emacs_env *env, ptrdiff_t nargs __attribute__((unused)),
                                    emacs_value args[], void *data __attribute__((unused))) {
   context* pctx = env->get_user_ptr(env, args[0]);
   int i = env->extract_integer(env, args[1]);
@@ -82,7 +82,7 @@ emacs_value Fnnn_get_file_at_index(emacs_env *env, ptrdiff_t nargs __attribute__
                           pctx->pdents[i].nlen - 1); // not including null byte
 }
 
-emacs_value Fnnn_number_of_entries(emacs_env *env, ptrdiff_t nargs __attribute__((unused)),
+static emacs_value Fnnn_number_of_entries(emacs_env *env, ptrdiff_t nargs __attribute__((unused)),
                                    emacs_value args[], void *data __attribute__((unused))) {
   context* pctx = env->get_user_ptr(env, args[0]);
   return env->make_integer(env, pctx->ndents);
